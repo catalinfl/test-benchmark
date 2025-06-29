@@ -2,9 +2,19 @@ package main
 
 import (
 	"net/http"
+	"regexp"
 
 	"github.com/catalinfl/tree-framework"
 )
+
+// useRegex validates a string against a regex pattern
+func useRegex(pattern, text string) bool {
+	matched, err := regexp.MatchString(pattern, text)
+	if err != nil {
+		return false
+	}
+	return matched
+}
 
 type Product struct {
 	ID          int      `json:"id"`
@@ -45,6 +55,73 @@ func main() {
 			"message": "Product created successfully",
 			"product": product,
 		}, http.StatusCreated)
+	})
+
+	// Additional regex validation endpoint for phone numbers
+	app.GET("/validate/phone/:|^\\+?[1-9]\\d{1,14}$|", func(ctx *tree.Ctx) error {
+		phone, err := ctx.RegexURLParam(1)
+		if err != nil {
+			return ctx.SendJSON(tree.J{
+				"valid":   false,
+				"error":   "Invalid phone format",
+				"details": err.Error(),
+			}, http.StatusBadRequest)
+		}
+
+		return ctx.SendJSON(tree.J{
+			"valid":   true,
+			"phone":   phone,
+			"message": "Valid international phone format",
+		}, http.StatusOK)
+	})
+
+	// Regex validation endpoint for email using RegexURLParam
+	// Route pattern with regex: :|pattern| format
+	app.GET("/validate/:|^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$|", func(ctx *tree.Ctx) error {
+		email, err := ctx.RegexURLParam(1)
+		if err != nil {
+			return ctx.SendJSON(tree.J{
+				"valid":   false,
+				"error":   "Invalid email format - regex validation failed",
+				"details": err.Error(),
+			}, http.StatusBadRequest)
+		}
+
+		return ctx.SendJSON(tree.J{
+			"valid":   true,
+			"email":   email,
+			"message": "Valid email format - passed regex validation",
+		}, http.StatusOK)
+	})
+
+	// Multiple regex parameters example
+	app.GET("/user/:|^[a-zA-Z0-9_]{3,20}$|/email/:|^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$|", func(ctx *tree.Ctx) error {
+		// Get first regex param (username)
+		username, err := ctx.RegexURLParam(1)
+		if err != nil {
+			return ctx.SendJSON(tree.J{
+				"valid":   false,
+				"error":   "Invalid username format",
+				"details": err.Error(),
+			}, http.StatusBadRequest)
+		}
+
+		// Get second regex param (email)
+		email, err := ctx.RegexURLParam(2)
+		if err != nil {
+			return ctx.SendJSON(tree.J{
+				"valid":   false,
+				"error":   "Invalid email format",
+				"details": err.Error(),
+			}, http.StatusBadRequest)
+		}
+
+		return ctx.SendJSON(tree.J{
+			"valid":    true,
+			"username": username,
+			"email":    email,
+			"message":  "Both username and email are valid",
+		}, http.StatusOK)
 	})
 
 	// GET endpoint for retrieving a product

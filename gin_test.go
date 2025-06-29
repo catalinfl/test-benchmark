@@ -15,7 +15,7 @@ import (
 func setupGinApp() *gin.Engine {
 	// Set Gin to release mode to avoid debug output affecting benchmarks
 	gin.SetMode(gin.ReleaseMode)
-	
+
 	app := gin.New()
 
 	// Simple GET handler

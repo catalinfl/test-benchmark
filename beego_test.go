@@ -33,12 +33,12 @@ func (c *BeegoUserController) Get() {
 		Name:  "John Doe",
 		Email: "john@example.com",
 	}
-	
+
 	response := map[string]interface{}{
 		"id":   id,
 		"user": user,
 	}
-	
+
 	c.Data["json"] = response
 	c.ServeJSON()
 }
@@ -58,7 +58,7 @@ func (c *BeegoUserController) Post() {
 		"name":  user.Name,
 		"email": user.Email,
 	}
-	
+
 	c.Ctx.ResponseWriter.WriteHeader(http.StatusCreated)
 	c.Data["json"] = response
 	c.ServeJSON()
@@ -72,12 +72,12 @@ type BeegoMultiParamsController struct {
 func (c *BeegoMultiParamsController) Get() {
 	userID := c.Ctx.Input.Param(":id")
 	postID := c.Ctx.Input.Param(":postId")
-	
+
 	response := map[string]string{
 		"userId": userID,
 		"postId": postID,
 	}
-	
+
 	c.Data["json"] = response
 	c.ServeJSON()
 }
@@ -90,12 +90,12 @@ type BeegoSearchController struct {
 func (c *BeegoSearchController) Get() {
 	query := c.GetString("q")
 	limit := c.GetString("limit")
-	
+
 	response := map[string]string{
 		"query": query,
 		"limit": limit,
 	}
-	
+
 	c.Data["json"] = response
 	c.ServeJSON()
 }
@@ -105,19 +105,19 @@ func setupBeegoApp() {
 	// Disable logs for benchmarking
 	web.BConfig.Log.AccessLogs = false
 	web.BConfig.RunMode = "prod"
-	
+
 	// Simple GET handler
 	web.Router("/", &BeegoController{})
-	
+
 	// JSON response handler
 	web.Router("/user/:id", &BeegoUserController{})
-	
+
 	// POST handler
 	web.Router("/users", &BeegoUserController{})
-	
+
 	// Multiple route parameters
 	web.Router("/users/:id/posts/:postId", &BeegoMultiParamsController{})
-	
+
 	// Query parameters
 	web.Router("/search", &BeegoSearchController{})
 }
@@ -275,7 +275,7 @@ func (c *BeegoDataController) Post() {
 		c.ServeJSON()
 		return
 	}
-	
+
 	c.Data["json"] = data
 	c.ServeJSON()
 }
@@ -296,7 +296,7 @@ func BenchmarkBeegoLargePayload(b *testing.B) {
 func benchmarkBeegoPayloadSize(b *testing.B, size int) {
 	web.BConfig.Log.AccessLogs = false
 	web.BConfig.RunMode = "prod"
-	
+
 	web.Router("/data", &BeegoDataController{})
 
 	// Create payload of specified size

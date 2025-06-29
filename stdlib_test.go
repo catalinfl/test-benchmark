@@ -30,25 +30,25 @@ func setupStandardHTTP() *http.ServeMux {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 			return
 		}
-		
+
 		// Extract ID from URL path
 		path := strings.TrimPrefix(r.URL.Path, "/user/")
 		if path == "" {
 			http.Error(w, "Invalid ID", http.StatusBadRequest)
 			return
 		}
-		
+
 		user := User{
 			ID:    1,
 			Name:  "John Doe",
 			Email: "john@example.com",
 		}
-		
+
 		response := map[string]interface{}{
 			"id":   path,
 			"user": user,
 		}
-		
+
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(response)
@@ -60,7 +60,7 @@ func setupStandardHTTP() *http.ServeMux {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 			return
 		}
-		
+
 		var user User
 		if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 			w.Header().Set("Content-Type", "application/json")
@@ -75,7 +75,7 @@ func setupStandardHTTP() *http.ServeMux {
 			"name":  user.Name,
 			"email": user.Email,
 		}
-		
+
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
 		json.NewEncoder(w).Encode(response)
@@ -87,26 +87,26 @@ func setupStandardHTTP() *http.ServeMux {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 			return
 		}
-		
+
 		// Simple parsing of /users/:id/posts/:postId
 		path := strings.TrimPrefix(r.URL.Path, "/users/")
 		parts := strings.Split(path, "/")
-		
+
 		if len(parts) >= 3 && parts[1] == "posts" {
 			userID := parts[0]
 			postID := parts[2]
-			
+
 			response := map[string]string{
 				"userId": userID,
 				"postId": postID,
 			}
-			
+
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 			json.NewEncoder(w).Encode(response)
 			return
 		}
-		
+
 		http.Error(w, "Not found", http.StatusNotFound)
 	})
 
@@ -116,7 +116,7 @@ func setupStandardHTTP() *http.ServeMux {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 			return
 		}
-		
+
 		query := r.URL.Query().Get("q")
 		limit := r.URL.Query().Get("limit")
 
@@ -124,7 +124,7 @@ func setupStandardHTTP() *http.ServeMux {
 			"query": query,
 			"limit": limit,
 		}
-		
+
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(response)
@@ -286,7 +286,7 @@ func benchmarkStandardHTTPPayloadSize(b *testing.B, size int) {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 			return
 		}
-		
+
 		// Read and echo back the data
 		var data map[string]interface{}
 		if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
@@ -295,7 +295,7 @@ func benchmarkStandardHTTPPayloadSize(b *testing.B, size int) {
 			json.NewEncoder(w).Encode(map[string]string{"error": "Invalid JSON"})
 			return
 		}
-		
+
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(data)

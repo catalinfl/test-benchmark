@@ -40,12 +40,12 @@ func setupFiberApp() *fiber.App {
 			Name:  "John Doe",
 			Email: "john@example.com",
 		}
-		
+
 		response := fiber.Map{
 			"id":   id,
 			"user": user,
 		}
-		
+
 		return c.Status(http.StatusOK).JSON(response)
 	})
 
@@ -64,7 +64,7 @@ func setupFiberApp() *fiber.App {
 			"name":  user.Name,
 			"email": user.Email,
 		}
-		
+
 		return c.Status(http.StatusCreated).JSON(response)
 	})
 
@@ -72,12 +72,12 @@ func setupFiberApp() *fiber.App {
 	app.Get("/users/:id/posts/:postId", func(c *fiber.Ctx) error {
 		userID := c.Params("id")
 		postID := c.Params("postId")
-		
+
 		response := fiber.Map{
 			"userId": userID,
 			"postId": postID,
 		}
-		
+
 		return c.Status(http.StatusOK).JSON(response)
 	})
 
@@ -85,12 +85,12 @@ func setupFiberApp() *fiber.App {
 	app.Get("/search", func(c *fiber.Ctx) error {
 		query := c.Query("q")
 		limit := c.Query("limit")
-		
+
 		response := fiber.Map{
 			"query": query,
 			"limit": limit,
 		}
-		
+
 		return c.Status(http.StatusOK).JSON(response)
 	})
 
