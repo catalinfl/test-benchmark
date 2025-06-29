@@ -1,0 +1,101 @@
+{
+  "valid_product": {
+    "name": "Gaming123",
+    "description": "High performance gaming laptop with advanced features and excellent build quality",
+    "price": 1299.99,
+    "category": "electronics",
+    "sku": "ABC12345",
+    "in_stock": true,
+    "tags": ["gaming", "laptop", "electronics"]
+  },
+
+  "invalid_name_too_short": {
+    "name": "PC",
+    "description": "Short name test - this should fail minlen validation",
+    "price": 999.99,
+    "category": "electronics",
+    "sku": "DEF67890",
+    "in_stock": true,
+    "tags": ["test"]
+  },
+
+  "invalid_name_non_alphanumeric": {
+    "name": "Gaming@Laptop!",
+    "description": "Name contains special characters which should fail alphanumeric validation",
+    "price": 1299.99,
+    "category": "electronics",
+    "sku": "GHI11111",
+    "in_stock": true,
+    "tags": ["gaming"]
+  },
+
+  "invalid_description_too_short": {
+    "name": "Laptop",
+    "description": "Short",
+    "price": 799.99,
+    "category": "electronics",
+    "sku": "JKL22222",
+    "in_stock": true,
+    "tags": ["laptop"]
+  },
+
+  "invalid_price_negative": {
+    "name": "FreeProduct",
+    "description": "This product has negative price which should fail gt validation",
+    "price": -100.50,
+    "category": "electronics",
+    "sku": "MNO33333",
+    "in_stock": true,
+    "tags": ["free"]
+  },
+
+  "invalid_category": {
+    "name": "TestProduct",
+    "description": "Product with invalid category that is not in the oneof list",
+    "price": 299.99,
+    "category": "invalidcategory",
+    "sku": "PQR44444",
+    "in_stock": true,
+    "tags": ["test"]
+  },
+
+  "invalid_sku_wrong_format": {
+    "name": "Product",
+    "description": "SKU does not match regex pattern - should be 3 letters + 5 digits",
+    "price": 199.99,
+    "category": "books",
+    "sku": "INVALID1",
+    "in_stock": true,
+    "tags": ["book"]
+  },
+
+  "invalid_sku_wrong_length": {
+    "name": "AnotherProduct",
+    "description": "SKU has wrong length - should be exactly 8 characters",
+    "price": 49.99,
+    "category": "books",
+    "sku": "ABC123456",
+    "in_stock": false,
+    "tags": ["book"]
+  },
+
+  "invalid_tags_empty": {
+    "name": "EmptyTags",
+    "description": "This product has empty tags array which should fail minlen validation",
+    "price": 99.99,
+    "category": "home",
+    "sku": "STU55555",
+    "in_stock": true,
+    "tags": []
+  },
+
+  "invalid_tags_too_many": {
+    "name": "TooManyTags",
+    "description": "This product has too many tags which should fail maxlen validation",
+    "price": 149.99,
+    "category": "sports",
+    "sku": "VWX66666",
+    "in_stock": true,
+    "tags": ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6"]
+  }
+}
